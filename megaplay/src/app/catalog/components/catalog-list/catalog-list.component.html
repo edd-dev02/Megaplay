@@ -1,0 +1,159 @@
+<!-- Sección 1 -->
+<section class="trend contenedor">
+  <h2 class="text-light py-3">Sensación del momento...</h2>
+
+  <div id="contenedor-trend" class="">
+    <div *ngFor="let pelicula of hero">
+      <div class="pelicula my-5">
+        <!-- Contenedor imagen de la película -->
+        <div class="contenedorImagen">
+          <img [src]="pelicula.imagen" alt="Imagen de la película">
+        </div>
+
+        <!-- Contenedor datos de la película -->
+        <div class="datos-pelicula">
+
+          <!-- Detalles -->
+          <div class="detalles-pelicula">
+            <p class="text-light">
+              <span class="fw-bold">Duración: </span>{{ pelicula.duracion }}
+            </p>
+            <p class="text-light">
+              <span class="fw-bold">Género: </span>{{ pelicula.genero }}
+            </p>
+          </div>
+
+          <!-- Información principal -->
+          <div class="informacion-pelicula">
+            <h3 class="text-light">{{ pelicula.titulo }}</h3>
+            <p class="text-light">{{ pelicula.descripcion }}</p>
+
+            <!-- Calificación -->
+            <p class="calificacion">
+              <i class="fa-solid fa-star"></i>
+              <span> Calificación: </span>{{ pelicula.calificacion }}
+            </p>
+
+            <!-- Acciones -->
+            <div class="acciones">
+              <button class="ver-ahora fw-bold">
+                <i class="fa-solid fa-film"></i> Ver
+              </button>
+              <button class="favorito fw-bold">
+                <i class="fa-solid fa-heart"></i> Favoritos
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sección 2 -->
+<section class="mas_vistos contenedor">
+  <h2 class="text-light">Más vistos</h2>
+  <div id="contenedor-masVistos" class="masVistos-grid">
+    <div *ngFor="let pelicula of masVistas">
+      <div class="pelicula my-5">
+        <!-- Contenedor imagen de la película -->
+        <div class="contenedorImagen">
+          <img [src]="pelicula.imagen" alt="Imagen de la película">
+        </div>
+
+        <!-- Contenedor datos de la película -->
+        <div class="datos-pelicula">
+
+          <!-- Detalles -->
+          <div class="detalles-pelicula">
+            <p class="text-light">
+              <span class="fw-bold">Duración: </span>{{ pelicula.duracion }}
+            </p>
+            <p class="text-light">
+              <span class="fw-bold">Género: </span>{{ pelicula.genero }}
+            </p>
+          </div>
+
+          <!-- Información principal -->
+          <div class="informacion-pelicula">
+            <h3 class="text-light">{{ pelicula.titulo }}</h3>
+            <p class="text-light">{{ pelicula.descripcion }}</p>
+
+            <!-- Calificación -->
+            <p class="calificacion">
+              <i class="fa-solid fa-star"></i>
+              <span> Calificación: </span>{{ pelicula.calificacion }}
+            </p>
+
+            <!-- Acciones -->
+            <div class="acciones">
+              <button class="ver-ahora fw-bold">
+                <i class="fa-solid fa-film"></i> Ver
+              </button>
+              <button class="favorito fw-bold">
+                <i class="fa-solid fa-heart"></i> Favoritos
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sección 3 -->
+<section class="recomendados contenedor">
+  <h2 class="text-light">Recomendados</h2>
+  <div id="contenedor-recomendados" class="recomendados-grid">
+    <div *ngFor="let pelicula of recomendados">
+      <div class="pelicula my-5">
+        <!-- Contenedor imagen de la película -->
+        <div class="contenedorImagen">
+          <img [src]="pelicula.imagen" alt="Imagen de la película">
+        </div>
+
+        <!-- Contenedor datos de la película -->
+        <div class="datos-pelicula">
+
+          <!-- Detalles -->
+          <div class="detalles-pelicula">
+            <p class="text-light">
+              <span class="fw-bold">Duración: </span>{{ pelicula.duracion }}
+            </p>
+            <p class="text-light">
+              <span class="fw-bold">Género: </span>{{ pelicula.genero }}
+            </p>
+          </div>
+
+          <!-- Información principal -->
+          <div class="informacion-pelicula">
+            <h3 class="text-light">{{ pelicula.titulo }}</h3>
+            <p class="text-light">{{ pelicula.descripcion }}</p>
+
+            <!-- Calificación -->
+            <p class="calificacion">
+              <i class="fa-solid fa-star"></i>
+              <span> Calificación: </span>{{ pelicula.calificacion }}
+            </p>
+
+            <!-- Acciones -->
+            <div class="acciones">
+              <button class="ver-ahora fw-bold">
+                <i class="fa-solid fa-film"></i> Ver
+              </button>
+              <button class="favorito fw-bold">
+                <i class="fa-solid fa-heart"></i> Favoritos
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

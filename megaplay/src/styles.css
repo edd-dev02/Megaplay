@@ -1,1 +1,70 @@
-/* You can add global styles to this file, and also import other style files */
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  font-size: 1.6rem;
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+  background: linear-gradient(135deg,
+          rgb(46, 43, 43),
+          rgb(22, 21, 21));
+}
+
+.contenedor-login {
+  width: 95%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contenedor {
+  width: 95%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contenedor-md {
+  width: 75%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+form,
+input,
+select,
+textarea,
+button,
+label {
+  font-family: inherit;
+  font-size: inherit;
+  display: block;
+  color: inherit;
+}
+
+/* Utilities */
+
+.mega {
+  color: transparent;
+  background: linear-gradient(to right, #006B8F 0%, #00A651 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
