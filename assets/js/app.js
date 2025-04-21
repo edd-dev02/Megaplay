@@ -121,7 +121,7 @@ function crearCardsPeliculas(listaPeliculas) {
         const icono_verAhotaBtn = document.createElement('i');
         icono_verAhotaBtn.classList.add('fa-solid', 'fa-film');
         verAhoraBtn.appendChild(icono_verAhotaBtn);
-        verAhoraBtn.append(' Ver ahora');
+        verAhoraBtn.append(' Ver');
         contenedorAcciones.appendChild(verAhoraBtn);
 
         const agregarFavBtn = document.createElement('button');

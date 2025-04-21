@@ -212,3 +212,22 @@ h1 {
   .favorito:hover {
     background-color: #c5303b;
   }
+
+
+/* Grid */
+
+/* @media (min-width: 768px){
+    .recomendados-grid, .masVistos-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 2rem;
+    }
+} */
+
+@media (min-width: 1024px){
+    .recomendados-grid, .masVistos-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 2rem;
+    }
+}
