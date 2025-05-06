@@ -1,0 +1,50 @@
+<section class="mas_vistos contenedor">
+  <h2 class="text-light">Mis Favoritos</h2>
+
+  <div *ngIf="favoritos.length === 0">
+    <p class="text-light">No hay películas en favoritos aún.</p>
+  </div>
+
+  <div class="masVistos-grid" *ngIf="favoritos.length > 0">
+    <div class="pelicula my-5" *ngFor="let pelicula of favoritos">
+        <!-- Contenedor imagen de la película -->
+        <div class="contenedorImagen">
+          <img [src]="pelicula.imagen" alt="Imagen de la película">
+        </div>
+
+        <!-- Contenedor datos de la película -->
+        <div class="datos-pelicula">
+
+          <!-- Detalles -->
+          <div class="detalles-pelicula">
+            <p class="text-light">
+              <span class="fw-bold">Duración: </span>{{ pelicula.duracion }}
+            </p>
+            <p class="text-light">
+              <span class="fw-bold">Género: </span>{{ pelicula.genero }}
+            </p>
+          </div>
+
+          <!-- Información principal -->
+          <div class="informacion-pelicula">
+            <h3 class="text-light">{{ pelicula.titulo }}</h3>
+            <p class="text-light">{{ pelicula.descripcion }}</p>
+
+            <!-- Calificación -->
+            <p class="calificacion">
+              <i class="fa-solid fa-star"></i>
+              <span> Calificación: </span>{{ pelicula.calificacion }}
+            </p>
+
+            <!-- Acciones -->
+            <div class="acciones">
+              <button class="ver-ahora">Ver ahora</button>
+              <button class="favorito" (click)="eliminar(pelicula.id)">Quitar</button>
+            </div>
+
+          </div>
+
+        </div>
+    </div>
+  </div>
+</section>

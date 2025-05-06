@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { MainPageComponent } from './pages/main-page.component';
 import { CatalogNavComponent } from './components/catalog-nav/catalog-nav.component';
 import { CatalogListComponent } from './components/catalog-list/catalog-list.component';
+import { FavoritesModule } from '../favorites/favorites.module';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -13,10 +15,13 @@ import { CatalogListComponent } from './components/catalog-list/catalog-list.com
     CatalogListComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule
   ],
   exports: [
-    MainPageComponent
+    MainPageComponent,
+    CatalogNavComponent,
+    CatalogListComponent
   ]
 })
 export class CatalogModule { }

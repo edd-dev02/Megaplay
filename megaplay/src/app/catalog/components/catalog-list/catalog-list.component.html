@@ -36,12 +36,17 @@
 
             <!-- Acciones -->
             <div class="acciones">
+
               <button class="ver-ahora fw-bold">
                 <i class="fa-solid fa-film"></i> Ver
               </button>
-              <button class="favorito fw-bold">
-                <i class="fa-solid fa-heart"></i> Favoritos
+
+              <button (click)="toggleFavorito(pelicula)" class="favorito fw-bold">
+                <i class="fa-solid fa-heart"></i>
+                {{ estaEnFavoritos(pelicula) ? 'Quitar de Favoritos' : 'Agregar a Favoritos' }}
               </button>
+
+
             </div>
 
           </div>
@@ -89,12 +94,16 @@
 
             <!-- Acciones -->
             <div class="acciones">
+
               <button class="ver-ahora fw-bold">
                 <i class="fa-solid fa-film"></i> Ver
               </button>
-              <button class="favorito fw-bold">
-                <i class="fa-solid fa-heart"></i> Favoritos
+
+              <button (click)="toggleFavorito(pelicula)" class="favorito fw-bold">
+                <i class="fa-solid fa-heart"></i>
+                {{ estaEnFavoritos(pelicula) ? 'Quitar de Favoritos' : 'Agregar a Favoritos' }}
               </button>
+
             </div>
 
           </div>
@@ -142,12 +151,16 @@
 
             <!-- Acciones -->
             <div class="acciones">
+
               <button class="ver-ahora fw-bold">
                 <i class="fa-solid fa-film"></i> Ver
               </button>
-              <button class="favorito fw-bold">
-                <i class="fa-solid fa-heart"></i> Favoritos
+
+              <button (click)="toggleFavorito(pelicula)" class="favorito fw-bold">
+                <i class="fa-solid fa-heart"></i>
+                {{ estaEnFavoritos(pelicula) ? 'Quitar de Favoritos' : 'Agregar a Favoritos' }}
               </button>
+
             </div>
 
           </div>

@@ -1,6 +1,7 @@
 {
   "hero": [
     {
+      "id": "hero_1",
       "titulo": "El Caballero de la Noche",
       "descripcion": "Batman se enfrenta al Joker en una batalla épica por Gotham.",
       "duracion": "2h 32min",
@@ -11,6 +12,7 @@
   ],
   "mas_vistas": [
     {
+      "id": "mas_1",
       "titulo": "Interstellar",
       "descripcion": "Un grupo de astronautas busca un nuevo hogar para la humanidad.",
       "duracion": "2h 49min",
@@ -19,6 +21,7 @@
       "imagen": "assets/img/interstellar.webp"
     },
     {
+      "id": "mas_2",
       "titulo": "Inception",
       "descripcion": "Un ladrón experto en sueños debe plantar una idea en la mente de un empresario.",
       "duracion": "2h 28min",
@@ -27,6 +30,7 @@
       "imagen": "assets/img/inception.webp"
     },
     {
+      "id": "mas_3",
       "titulo": "El Padrino",
       "descripcion": "La historia de la familia Corleone en el mundo de la mafia.",
       "duracion": "2h 55min",
@@ -35,6 +39,7 @@
       "imagen": "assets/img/godfather.webp"
     },
     {
+      "id": "mas_4",
       "titulo": "Matrix",
       "descripcion": "Un hacker descubre la verdadera naturaleza de su realidad.",
       "duracion": "2h 16min",
@@ -43,6 +48,7 @@
       "imagen": "assets/img/matrix.webp"
     },
     {
+      "id": "mas_5",
       "titulo": "Joker",
       "descripcion": "Arthur Fleck desciende a la locura en esta intensa historia de origen.",
       "duracion": "2h 2min",
@@ -51,6 +57,7 @@
       "imagen": "assets/img/joker.webp"
     },
     {
+      "id": "mas_6",
       "titulo": "Avengers: Endgame",
       "descripcion": "Los Vengadores luchan para revertir el chasquido de Thanos.",
       "duracion": "3h 1min",
@@ -61,6 +68,7 @@
   ],
   "recomendados": [
     {
+      "id": "rec_1",
       "titulo": "La La Land",
       "descripcion": "Un romance musical entre un pianista de jazz y una aspirante a actriz.",
       "duracion": "2h 8min",
@@ -69,6 +77,7 @@
       "imagen": "assets/img/la-la-land.webp"
     },
     {
+      "id": "rec_2",
       "titulo": "Forrest Gump",
       "descripcion": "Un hombre con un gran corazón recorre momentos clave de la historia de EE.UU.",
       "duracion": "2h 22min",
@@ -77,6 +86,7 @@
       "imagen": "assets/img/forrest-gump.webp"
     },
     {
+      "id": "rec_3",
       "titulo": "300",
       "descripcion": "El rey Leónidas lidera a 300 espartanos contra el ejército persa en una batalla épica.",
       "duracion": "1h 57min",
@@ -85,6 +95,7 @@
       "imagen": "assets/img/300.jpg"
     },
     {
+      "id": "rec_4",
       "titulo": "Mad Max: Fury Road",
       "descripcion": "Un mundo postapocalíptico donde la supervivencia es extrema.",
       "duracion": "2h 0min",
@@ -93,6 +104,7 @@
       "imagen": "assets/img/mad-max.jpg"
     },
     {
+      "id": "rec_5",
       "titulo": "El Lobo de Wall Street",
       "descripcion": "La historia de ascenso y caída de un corredor de bolsa sin escrúpulos.",
       "duracion": "3h 0min",
@@ -101,6 +113,7 @@
       "imagen": "assets/img/wall-street.webp"
     },
     {
+      "id": "rec_6",
       "titulo": "Spider-Man: No Way Home",
       "descripcion": "Peter Parker enfrenta las consecuencias de revelar su identidad.",
       "duracion": "2h 28min",
