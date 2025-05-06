@@ -1,4 +1,4 @@
-![app1](https://github.com/user-attachments/assets/a7534679-6408-4f6e-ad3f-c614ff28d403)# Implementación de la funcionabilidad agregar y quitar a favoritos, mejoras en la lógica del servicio y testing unitario.
+# Implementación de la funcionabilidad agregar y quitar a favoritos, mejoras en la lógica del servicio y testing unitario.
 
 ## Descripción: En esta entrega se trabajó en la funcionabilidad para agregar o quitar peliculas en favoritos, se implementaron las rutas y se trabajó con localStorage en la ruta de favoritos y toda su funcionabilidad implicada
 
