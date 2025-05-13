@@ -10,12 +10,13 @@ import { Movie } from '../../interfaces/movie.interfaces';
 export class CatalogListComponent implements OnInit {
 
 
-  @Input() peliculas: Movie[] = [];
-  @Output() quitarFavorito = new EventEmitter<string>(); // 👈 nuevo output
+  // @Input() peliculas: Movie[] = [];
 
-  hero: Movie[] = [];
-  masVistas: Movie[] = [];
-  recomendados: Movie[] = [];
+  @Output() quitarFavorito = new EventEmitter<string>();
+
+  public hero: Movie[] = [];
+  public masVistas: Movie[] = [];
+  public recomendados: Movie[] = [];
 
   constructor(private movieService: MovieService) {}
 
@@ -35,7 +36,7 @@ export class CatalogListComponent implements OnInit {
   toggleFavorito(pelicula: Movie): void {
     if (this.estaEnFavoritos(pelicula)) {
       this.movieService.eliminarDeFavoritos(pelicula.id);
-      this.quitarFavorito.emit(pelicula.id); // 👈 emitimos el id eliminado
+      this.quitarFavorito.emit(pelicula.id);
     } else {
       this.movieService.agregarAFavoritos(pelicula);
     }

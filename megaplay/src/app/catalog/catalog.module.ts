@@ -1,27 +1,31 @@
-import { NgModule } from '@angular/core';
+import { CatalogRoutingModule } from './catalog-routing.module';
 import { CommonModule } from '@angular/common';
-import { MainPageComponent } from './pages/main-page.component';
-import { CatalogNavComponent } from './components/catalog-nav/catalog-nav.component';
-import { CatalogListComponent } from './components/catalog-list/catalog-list.component';
-import { FavoritesModule } from '../favorites/favorites.module';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from '../shared/shared.module';
+
+import { CatalogListComponent } from './components/catalog-list/catalog-list.component';
+import { MainPageComponent } from './pages/main-page.component';
+import { FavoritesListComponent } from './components/favoritesList/favoritesList.component';
 
 
 
 @NgModule({
   declarations: [
+    CatalogListComponent,
+    FavoritesListComponent,
     MainPageComponent,
-    CatalogNavComponent,
-    CatalogListComponent
   ],
   imports: [
+    CatalogRoutingModule,
     CommonModule,
-    RouterModule
+    RouterModule,
+    SharedModule,
   ],
   exports: [
+    CatalogListComponent,
+    FavoritesListComponent,
     MainPageComponent,
-    CatalogNavComponent,
-    CatalogListComponent
   ]
 })
 export class CatalogModule { }

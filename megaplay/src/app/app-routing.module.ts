@@ -1,20 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FavoritesListComponent } from './favorites/favoritesList/favoritesList.component';
 import { CatalogListComponent } from './catalog/components/catalog-list/catalog-list.component';
 
 const routes: Routes = [
   {
-    path: 'home',
-    component: CatalogListComponent
-  },
-  {
-    path: 'favorites',
-    component: FavoritesListComponent
+    path: 'catalog',
+    loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule),
   },
   {
     path: '**',
-    redirectTo: 'home'
+    redirectTo: 'catalog'
   },
 ];
 
