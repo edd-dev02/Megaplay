@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CatalogListComponent } from './components/catalog-list/catalog-list.component';
-import { MainPageComponent } from './pages/main-page.component';
 import { FavoritesListComponent } from './components/favoritesList/favoritesList.component';
+import { AuthGuard } from '../guards/auth.guard';
 
 const routes: Routes = [
   {
     path: 'home',
-    component: CatalogListComponent
+    component: CatalogListComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'favorites',
-    component: FavoritesListComponent
+    component: FavoritesListComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: '**',

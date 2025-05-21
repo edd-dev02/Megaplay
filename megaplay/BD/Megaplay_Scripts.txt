@@ -1,0 +1,82 @@
+CREATE DATABASE Megaplay
+
+USE Megaplay;
+
+-- Crear tablas
+
+CREATE TABLE Users(
+	userId INT IDENTITY(1,1) PRIMARY KEY,
+	username NVARCHAR(100) NOT NULL UNIQUE,
+	passwordHash VARBINARY(64),
+	CreatedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+)
+
+CREATE TABLE Movies(
+	movieId INT IDENTITY(1,1) PRIMARY KEY,
+    title NVARCHAR(100) NOT NULL,
+    overview NVARCHAR(MAX) NOT NULL,
+    duration VARCHAR(20),
+    score DECIMAL(3,1),
+    genre NVARCHAR(50),
+    posterpath NVARCHAR(255)
+)
+
+CREATE TABLE Favorites(
+	userId INT NOT NULL,
+	movieId INT NOT NULL,
+	FavoriteAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
+	
+	CONSTRAINT PK_Favorites PRIMARY KEY(userId, movieId),
+
+	CONSTRAINT FK_Favorites_User FOREIGN KEY(userId) REFERENCES dbo.Users(userId),
+
+	CONSTRAINT FK_Favorites_Movie FOREIGN KEY(movieId) REFERENCES dbo.Movies(movieId),
+);
+
+CREATE TABLE Sections (
+  sectionID INT IDENTITY(1,1) PRIMARY KEY,
+  name NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE MovieSections (
+  movieID INT NOT NULL,
+  sectionID INT NOT NULL,
+  PRIMARY KEY (movieID, sectionID),
+  FOREIGN KEY (movieID) REFERENCES Movies(movieId),
+  FOREIGN KEY (sectionID) REFERENCES Sections(sectionID)
+);
+
+-- Insertar registros
+
+DECLARE @pass NVARCHAR(50) = 'qwerty12345';
+INSERT INTO Users(username, passwordHash) 
+VALUES ('admin', HASHBYTES('SHA2_512', @pass));
+
+INSERT INTO Sections(name) VALUES
+('Trending'),
+('Más vistos'),
+('Recomendados');
+
+INSERT INTO Movies (title, overview, duration, score, genre, posterpath) VALUES
+('Mad Max: Fury Road', 'A post-apocalyptic world where survival is extreme.', '2h 0min', 8.1, 'Action', '/madmax.webp'),
+('Inception', 'A thief who steals corporate secrets through dream-sharing.', '2h 28min', 8.8, 'Sci-Fi', '/inception.webp'),
+('The Dark Knight', 'Batman faces the Joker, a criminal mastermind.', '2h 32min', 9.0, 'Action', '/darkknight.webp'),
+('Interstellar', 'A team travels through a wormhole in space.', '2h 49min', 8.6, 'Sci-Fi', '/interstellar.webp'),
+('The Matrix', 'A hacker discovers the truth about reality.', '2h 16min', 8.7, 'Sci-Fi', '/matrix.webp'),
+('Pulp Fiction', 'The lives of two hitmen and others intertwine.', '2h 34min', 8.9, 'Crime', '/pulpfiction.webp'),
+('Fight Club', 'An office worker creates an underground fight club.', '2h 19min', 8.8, 'Drama', '/fightclub.webp'),
+('Forrest Gump', 'The story of a slow-witted but kind-hearted man.', '2h 22min', 8.8, 'Drama', '/forrestgump.webp'),
+('The Shawshank Redemption', 'Two imprisoned men bond over years.', '2h 22min', 9.3, 'Drama', '/shawshank.webp'),
+('Gladiator', 'A former Roman general seeks revenge.', '2h 35min', 8.5, 'Action', '/gladiator.webp'),
+('Avengers: Endgame', 'The Avengers unite to reverse Thanos’s actions.', '3h 1min', 8.4, 'Superhero', '/endgame.webp'),
+('Titanic', 'A love story aboard the Titanic.', '3h 14min', 7.9, 'Romance', '/titanic.webp'),
+('The Godfather', 'The aging patriarch of an organized crime dynasty.', '2h 55min', 9.2, 'Crime', '/godfather.webp'),
+('The Social Network', 'The story of Facebook’s founding.', '2h 0min', 7.7, 'Drama', '/socialnetwork.webp'),
+('The Lion King', 'A lion cub’s journey to adulthood and royalty.', '1h 28min', 8.5, 'Animation', '/lionking.webp'),
+('Toy Story', 'Toys come to life when humans are not around.', '1h 21min', 8.3, 'Animation', '/toystory.webp'),
+('Up', 'An old man ties balloons to his house to travel.', '1h 36min', 8.2, 'Animation', '/up.webp'),
+('Coco', 'A boy journeys into the Land of the Dead.', '1h 45min', 8.4, 'Animation', '/coco.webp'),
+('Parasite', 'A poor family schemes to infiltrate a wealthy household.', '2h 12min', 8.6, 'Thriller', '/parasite.webp'),
+('Whiplash', 'A young drummer trains under a ruthless instructor.', '1h 47min', 8.5, 'Drama', '/whiplash.webp');
+
+GO
