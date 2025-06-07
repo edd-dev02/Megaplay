@@ -1,41 +1,63 @@
-# Aplicación de Lazy Loading, creación de Base de datos y primeros pasos con los Guards
+# Aplicación API Megaplay, arquitectura Repository.
 
-## Descripción: En esta entrega se hizo una refactorización en la estructura del proyecto comenzando con las rutas y eliminando un módulo el cual más tarde indexamos su funcionabilidad en el módulo principal llamado Catalog. Implementamos el Lazy Loading en nuestros módulos y manejamos las rutas de manera correcta además de crear Guards que posteriormente nos ayudaran a proteger la sesión del usuario en todos los componentes
+## Descripción: Este Sprint sentó las bases la API de megaplay para poder consumir los servicios de peliculas, añadir a favoritos y autenticación
 
 ## Objetivos: 
-1. Refactorizar la estructura proyecto y las rutas
-2. Uso de LazyLoading
-3. Implementación de Guards sobre las rutas para proteger la aplicación
-4. Creación de la BD y su esquema
+1. Crear un proyecto con .Net 8 y Entity Framework
+2. Ligero rediseño en la BD implementando la metodología Code First
+3. Crear y ejecutar las migraciones
+4. Utilizar buenas prácticas implementando una lógica de 5 capas para las tablas implicadas (modelo, DTO, mapping, repositorio, controlador)
+5. Probar los endpoints con Swagger
 
 ## Nombre: Eduardo Antonio Sandoval Adame (Proyecto: Megaplay)
 
-## Importante: Se añadio un directorio en la raíz del proyecto llamado 'BD' que contiene el respaldo de mi base de datos, en caso de no poder importarla también se adjuntaron todos los scripts aparte para ejecutarlos al mismo tiempo y tener la misma estructura.
-
 ## Captura de pantalla:
-Rutas con Lazy Loading en módulos
-![image](https://github.com/user-attachments/assets/d68777c8-961f-4a13-b22a-3276754c915b)
+- Modelo E -R 
+![Megaplay](https://github.com/user-attachments/assets/dc871469-7c47-4df0-87bd-fede67c1d4e9)
 
-Uso de Guards
-![image](https://github.com/user-attachments/assets/df82968d-c120-4cf3-85f8-cecd69f748d3)
+- Arquitectura de la API
+![ArquitecturaAPI](https://github.com/user-attachments/assets/3c56175d-b508-46e6-b702-06b52f830eb0)
 
-Esquema de mi base de datos 'Megaplay'
-![Modelo_BD](https://github.com/user-attachments/assets/cca61870-37c1-4d82-943c-1def501f3ca3)
+- Probando el Endpoint Get de la entidad Pelicula que involucra a las otras dos entidades
+![PruebaAPI1](https://github.com/user-attachments/assets/8c98933d-21cb-45b0-ad5b-8c95270e05d4)
+![PruebaAPI2](https://github.com/user-attachments/assets/7d63686f-df2c-4ff9-8401-6a4278c8479b)
+![PruebaAPI3](https://github.com/user-attachments/assets/eb8cba90-a41f-4c51-b983-85f2686a73ab)
 
-Implementación de vista Login
-![image](https://github.com/user-attachments/assets/f5870b4e-d5a3-4c18-bc05-d586284f2199)
-
-Guard configurado para que redirija al Login
-![image](https://github.com/user-attachments/assets/67db580d-d77f-44f8-941e-29adfe6e16a5)
-![image](https://github.com/user-attachments/assets/d220f134-c814-425d-9ef2-f0b2a22d7725)
 
 ***
 ## Instrucciones para descargar el repo:
 1. Clonar el repositorio en una carpeta
-2. Ejecutar el comando 'npm install' para que se cree el node_modules
-3. Levantar el servidor con 'ng serve -o'
+2. Ejecutar el comando dotnet run o usar la opción manual en VS Code
+![image](https://github.com/user-attachments/assets/52e2bae2-bc6d-4711-ae3e-2092a070c5c3)
+3. Probar los diferentes endpoints y sus 4 acciones en el panel de Swagger
 
 ## Dependencias utilizadas:
+.Net:
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.5">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+</Project>
+
+Angular:
 {
   "name": "megaplay",
   "version": "0.0.0",
@@ -75,18 +97,21 @@ Guard configurado para que redirija al Login
   }
 }
 ## ¿Cómo se realizó el proyecto?
-En este sprint se siguio los pasos del challenger para implementar el lazy loading y los guards, asi mismo creamos la BD siguiendo sus consejos para posteriormente trabajar con la API rest que desarrollaremos
+En este sprint creamos un proyecto en .Net 8 haciendo uso de buenas prácticas de código, implementando la metodología Code First para crear la BD mediante migraciones, se trabajo con 5 capas de lógica principalmente (modelo, DTO, mapping, repositorio, controlador) y para asegurar el funcionamiento se probaron todos los endpoints en Swagger
 
 ## Problemas conocidos:
-1. Bugs al refactorizar la estructura del proyecto
-2. El Guard no cargaba los componentes al estar mal configurado ya que no redirigia al login
+1. Aprender C# desde cero y el framework de .Net en el tiempo de un Sprint
+2. Relacionar modelos entre si para crear correctamente las capas de lógica de la API para seguir buenas prácticas
+3. Mostrar los datos de géneros y secciones en las consultas de una pelicula
+4. Falta de tiempo para terminar al 100% la API
+5. Falta de conocimiento para llevar a cabo la autenticación tanto en el backend como en el frontend
 
 ## Retrospectiva.
 ### ¿Qué hice bien?
-Reestructurar mi proyecto e implementar el lazy loading a los módulos
+Crear la API con buenas prácticas y dejar funcionando correctamente los avances, poco más del 50% de totalidad de los requerimientos del Backend
 ### ¿Qué no salió bien?
-Falta de implementación de los test unitarios a mis nuevas funcionabilidades
+No se logró terminar al 100% las funcionabilidades del backend ni tampoco lo integramos con el frontend
 ### ¿Qué puedo hacer diferente?
-Comprender el uso de .Net para crear mi API e implementar la lógica necesaria para posteriormente hacer una refactorización de las funciones de los servicios
+Investigar y poner en práctica lo necesario para terminar mi API y proceder a integrar todo con mi frontend
 
     
