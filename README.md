@@ -33,29 +33,11 @@
 
 ## Dependencias utilizadas:
 .Net:
-<Project Sdk="Microsoft.NET.Sdk.Web">
-
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="14.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.5">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-  </ItemGroup>
-
-</Project>
+AutoMapper — v14.0.0
+Microsoft.EntityFrameworkCore.Design — v9.0.5
+Microsoft.EntityFrameworkCore.SqlServer — v9.0.5
+Microsoft.EntityFrameworkCore.Tools — v9.0.5
+Swashbuckle.AspNetCore — v6.6.2
 
 Angular:
 {
