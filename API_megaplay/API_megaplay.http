@@ -1,0 +1,6 @@
+@API_megaplay_HostAddress = http://localhost:5164
+
+GET {{API_megaplay_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
