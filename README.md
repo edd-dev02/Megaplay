@@ -1,26 +1,34 @@
-# Implementación de la funcionabilidad agregar y quitar a favoritos, mejoras en la lógica del servicio y testing unitario.
+# Aplicación de Lazy Loading, creación de Base de datos y primeros pasos con los Guards
 
-## Descripción: En esta entrega se trabajó en la funcionabilidad para agregar o quitar peliculas en favoritos, se implementaron las rutas y se trabajó con localStorage en la ruta de favoritos y toda su funcionabilidad implicada
+## Descripción: En esta entrega se hizo una refactorización en la estructura del proyecto comenzando con las rutas y eliminando un módulo el cual más tarde indexamos su funcionabilidad en el módulo principal llamado Catalog. Implementamos el Lazy Loading en nuestros módulos y manejamos las rutas de manera correcta además de crear Guards que posteriormente nos ayudaran a proteger la sesión del usuario en todos los componentes
 
 ## Objetivos: 
-1. Crear las rutas necesarias del proyecto (principalmente home y favorites)
-2. Implementar el router
-3. Crear nuevo módulo para las peliculas añadidas en favoritos
-4. Implementar nuevas funcionabilidades en el servicio de la pelicula principal
-5. Trabajar en la lógica para agregar, eliminar y mostrar las peliculas del localStorage
+1. Refactorizar la estructura proyecto y las rutas
+2. Uso de LazyLoading
+3. Implementación de Guards sobre las rutas para proteger la aplicación
+4. Creación de la BD y su esquema
 
 ## Nombre: Eduardo Antonio Sandoval Adame (Proyecto: Megaplay)
 
+## Importante: Se añadio un directorio en la raíz del proyecto llamado 'BD' que contiene el respaldo de mi base de datos, en caso de no poder importarla también se adjuntaron todos los scripts aparte para ejecutarlos al mismo tiempo y tener la misma estructura.
+
 ## Captura de pantalla:
-Aplicación mostrando la funcionabilidad de favoritos.
-![app1](https://github.com/user-attachments/assets/985c70c8-e743-48d2-a631-de326cc83b69)
-![app2](https://github.com/user-attachments/assets/c2f99fff-3c7b-45db-9e9b-70d378163bc6)
-*** 
-Reportes de test´s unitarios.
-![testing1](https://github.com/user-attachments/assets/18a2bbb9-5951-4794-9bdc-1af5678ee9c7)
-![testing2](https://github.com/user-attachments/assets/92003ef9-95c3-4359-9a00-7a3df756409c)
-![testing3](https://github.com/user-attachments/assets/0f41be68-0f1b-45f8-825e-5871c4b55752)
-![testing4](https://github.com/user-attachments/assets/84fa2e9f-4355-42e3-abcd-26c9885bef9f)
+Rutas con Lazy Loading en módulos
+![image](https://github.com/user-attachments/assets/d68777c8-961f-4a13-b22a-3276754c915b)
+
+Uso de Guards
+![image](https://github.com/user-attachments/assets/df82968d-c120-4cf3-85f8-cecd69f748d3)
+
+Esquema de mi base de datos 'Megaplay'
+![Modelo_BD](https://github.com/user-attachments/assets/cca61870-37c1-4d82-943c-1def501f3ca3)
+
+Implementación de vista Login
+![image](https://github.com/user-attachments/assets/f5870b4e-d5a3-4c18-bc05-d586284f2199)
+
+Guard configurado para que redirija al Login
+![image](https://github.com/user-attachments/assets/67db580d-d77f-44f8-941e-29adfe6e16a5)
+![image](https://github.com/user-attachments/assets/d220f134-c814-425d-9ef2-f0b2a22d7725)
+
 ***
 ## Instrucciones para descargar el repo:
 1. Clonar el repositorio en una carpeta
@@ -67,20 +75,18 @@ Reportes de test´s unitarios.
   }
 }
 ## ¿Cómo se realizó el proyecto?
-A medida que he ido adquiriendo nuevos conocimientos y ganado mas experiencia con Angular, hice una ligera re-estructuración del proyecto, primero me asegure de crear un nuevo módulo para favoritos y posteriormente implementar toda la funcionabilidad para utilizar el router, después hice modificaciones en mi intarfaz de la pelicula para añadir ID's ya que estos me permitieron trabajar con el localStorage de manera sencilla.
-Después comence a trabajar en la funcionabilidad para añadir a favoritos, hice modificaciones en mi componente de la card de la pelicula principal para que ciertas partes del contenido sea dinámico como por ejemplo cambiar los estilos del botón para añadir o quitar una pelicula, después trabajamos en los servicios de ambos módulos para que toda la lógica funcione perfectamente y finalmente mostrar una vista 
+En este sprint se siguio los pasos del challenger para implementar el lazy loading y los guards, asi mismo creamos la BD siguiendo sus consejos para posteriormente trabajar con la API rest que desarrollaremos
 
 ## Problemas conocidos:
-1. Trabajar el router con diferentes módulos, se contempla la posibilidad de usar rutas hijas en un futuro.
-2. Aplicación de test unitarios
-3. Dificultad para que la lógica del localStorage funcione bien.
+1. Bugs al refactorizar la estructura del proyecto
+2. El Guard no cargaba los componentes al estar mal configurado ya que no redirigia al login
 
 ## Retrospectiva.
 ### ¿Qué hice bien?
-Modularizar mejor mi aplicación, hacer mejoras en mi interfaz, implementar y documentar una lógica sencilla para agregar a favoritos
+Reestructurar mi proyecto e implementar el lazy loading a los módulos
 ### ¿Qué no salió bien?
-Los test unitarios no son correctos debido a la falta de conocimiento, no pude dedicar tanto tiempo a aprender testing ya que aun me encuentro en la curva de aprendizaje para comprender Angular
+Falta de implementación de los test unitarios a mis nuevas funcionabilidades
 ### ¿Qué puedo hacer diferente?
-Dedicar mas tiempo de estudio a los test unitarios
+Comprender el uso de .Net para crear mi API e implementar la lógica necesaria para posteriormente hacer una refactorización de las funciones de los servicios
 
     
