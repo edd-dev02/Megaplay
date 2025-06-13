@@ -4,6 +4,7 @@ using API_megaplay.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_megaplay.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250611164852_TableUserEncryptedV1")]
+    partial class TableUserEncryptedV1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace API_megaplay.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("API_megaplay.Models.Favorites", b =>
-                {
-                    b.Property<int>("UsersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MoviesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UsersId", "MoviesId");
-
-                    b.HasIndex("MoviesId");
-
-                    b.ToTable("Favorites");
-                });
 
             modelBuilder.Entity("API_megaplay.Models.Genre", b =>
                 {
@@ -153,25 +141,6 @@ namespace API_megaplay.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("API_megaplay.Models.Favorites", b =>
-                {
-                    b.HasOne("API_megaplay.Models.Movie", "Movie")
-                        .WithMany("Favorites")
-                        .HasForeignKey("MoviesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API_megaplay.Models.User", "User")
-                        .WithMany("Favorites")
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Movie");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("API_megaplay.Models.Movie", b =>
                 {
                     b.HasOne("API_megaplay.Models.Genre", "Genre")
@@ -196,19 +165,9 @@ namespace API_megaplay.Migrations
                     b.Navigation("Movies");
                 });
 
-            modelBuilder.Entity("API_megaplay.Models.Movie", b =>
-                {
-                    b.Navigation("Favorites");
-                });
-
             modelBuilder.Entity("API_megaplay.Models.Section", b =>
                 {
                     b.Navigation("Movies");
-                });
-
-            modelBuilder.Entity("API_megaplay.Models.User", b =>
-                {
-                    b.Navigation("Favorites");
                 });
 #pragma warning restore 612, 618
         }

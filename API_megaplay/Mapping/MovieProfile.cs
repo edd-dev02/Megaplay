@@ -12,7 +12,7 @@ public class MovieProfile : Profile
             .ForMember(dest => dest.GenreName, opt => opt.MapFrom(src => src.Genre.GenreName))
             .ForMember(dest => dest.SectionName, opt => opt.MapFrom(src => src.Section.SectionName));
 
-        CreateMap<MovieDto, Movie>();
+        //CreateMap<MovieDto, Movie>();
         CreateMap<Movie, CreateMovieDto>().ReverseMap();
     }
 }

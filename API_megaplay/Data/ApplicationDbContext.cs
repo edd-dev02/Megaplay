@@ -15,6 +15,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Genre> Genres { get; set; }
     public DbSet<Movie> Movies { get; set; }
     public DbSet<Section> Sections { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Favorites> Favorites { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,5 +35,19 @@ public class ApplicationDbContext : DbContext
             .WithMany(s => s.Movies)
             .HasForeignKey(m => m.SectionId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // Relación N:M Usuarios-Peliculas para crear favoritos
+        modelBuilder.Entity<Favorites>()
+        .HasKey(f => new { f.UsersId, f.MoviesId }); // Clave compuesta
+
+        modelBuilder.Entity<Favorites>()
+            .HasOne(f => f.User)
+            .WithMany(u => u.Favorites)
+            .HasForeignKey(f => f.UsersId);
+
+        modelBuilder.Entity<Favorites>()
+            .HasOne(f => f.Movie)
+            .WithMany(m => m.Favorites)
+            .HasForeignKey(f => f.MoviesId);
     }
 }

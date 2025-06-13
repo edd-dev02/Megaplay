@@ -34,4 +34,8 @@ public class Movie
     [Required]
     public int SectionId { get; set; }
     public Section? Section { get; set; }
+
+    // TODO: Relación N:M con Users
+    public ICollection<Favorites> Favorites { get; set; } = new List<Favorites>();
+
 }

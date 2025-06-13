@@ -18,6 +18,12 @@ public class CreateMovieDto
     [Range(1.0, 10.0, ErrorMessage = "El puntaje debe estar entre 1.0 y 10.0")]
     public double Score { get; set; }
 
+    [Required(ErrorMessage = "El link del trailer es obligatorio")]
+    public string Trailer { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "El recurso de la imagen es obligatorio")]
+    public string Posterpath { get; set; } = string.Empty;
+
     [Required(ErrorMessage = "Debe especificarse el género")]
     public int GenreId { get; set; }
     [Required(ErrorMessage = "Debe especificarse la sección a la que pertenece")]

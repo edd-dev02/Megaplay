@@ -51,14 +51,22 @@ public class MoviesController : ControllerBase
     [HttpPost]
     public ActionResult CreateMovie([FromBody] CreateMovieDto createDto)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
 
         if (!_genreRepo.GenreExists(createDto.GenreId))
+        {
             return BadRequest("El género especificado no existe.");
+        }
+
 
         // 🔍 Verificación de la sección
         if (!_sectionRepo.SectionExists(createDto.SectionId))
-            return BadRequest("La sección especificada no existe.");
+        {
+             return BadRequest("La sección especificada no existe.");
+        }
 
         if (_movieRepo.MovieExists(createDto.Title))
         {
