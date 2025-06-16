@@ -11,7 +11,7 @@ public class ApplicationDbContext : DbContext
 
     }
 
-    // DB Sets
+    // DB Sets: Se definen las tablas de la BD
     public DbSet<Genre> Genres { get; set; }
     public DbSet<Movie> Movies { get; set; }
     public DbSet<Section> Sections { get; set; }

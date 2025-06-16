@@ -68,7 +68,7 @@ public class UserRepository : IUserRepository
         }
 
         // Encriptar la contraseña al momento de crear el usuario ANTES de mandarlo a la BD
-        user.password = Encrypt(user.password);
+        user.Password = Encrypt(user.Password!);
 
         // Guardar usuario
         user.CreatedAt = DateTime.Now;
@@ -145,6 +145,11 @@ public class UserRepository : IUserRepository
         }
 
         return _db.Users.Any(u => u.Email.ToLower().Trim() == email.ToLower().Trim());
+    }
+
+    public User? GetUserByEmail(string email)
+    {
+        return _db.Users.FirstOrDefault(u => u.Email.ToLower().Trim() == email.ToLower().Trim());
     }
 
 }

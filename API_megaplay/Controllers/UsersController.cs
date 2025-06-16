@@ -4,6 +4,12 @@ using API_megaplay.Repository.IRepository;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using API_megaplay.Helpers;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+
 
 namespace API_megaplay.Controllers
 {
@@ -20,6 +26,77 @@ namespace API_megaplay.Controllers
             _userRepository = userRepository;
             _mapper = mapper;
         }
+
+
+        // Endpoint de Authentication
+        [HttpPost("login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public IActionResult Login([FromBody] LoginDto loginDto)
+        {
+            if (loginDto == null || string.IsNullOrWhiteSpace(loginDto.Email) || string.IsNullOrWhiteSpace(loginDto.Password))
+            {
+                return BadRequest("Email y contraseña son requeridos.");
+            }
+
+            // Buscar el usuario por su email
+            var userFromDb = _userRepository.GetUserByEmail(loginDto.Email);
+
+            if (userFromDb == null)
+            {
+                return Unauthorized("Credenciales inválidas.");
+            }
+
+            // Encriptar la contraseña proporcionada y compararla
+            var encryptedInputPassword = _userRepository.Encrypt(loginDto.Password);
+
+            if (userFromDb.Password != encryptedInputPassword)
+            {
+                return Unauthorized("Credenciales inválidas.");
+            }
+
+            // ========================
+            // Generar el token JWT
+            // ========================
+
+            // 🔐 Esto en la vida real debería venir de appsettings.json
+            var key = "clave-super-secreta-para-token-jwt-1234567890";
+            var keyBytes = Encoding.UTF8.GetBytes(key);
+            var securityKey = new SymmetricSecurityKey(keyBytes);
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            // Puedes agregar más claims si lo deseas
+            var claims = new[]
+            {
+        new Claim(ClaimTypes.NameIdentifier, userFromDb.UserId.ToString()),
+        new Claim(ClaimTypes.Email, userFromDb.Email),
+        new Claim(ClaimTypes.Name, userFromDb.Username),
+    };
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddHours(1),
+                SigningCredentials = credentials
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var jwt = tokenHandler.WriteToken(token);
+
+            // Devolver el token al frontend
+            return Ok(new
+            {
+                token = jwt,
+                username = userFromDb.Username,
+                email = userFromDb.Email,
+                userId = userFromDb.UserId
+            });
+        }
+
+
+
 
         // Endpoint obtener los usuarios
         [HttpGet]

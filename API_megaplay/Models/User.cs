@@ -17,7 +17,7 @@ public class User
     public string Username { get; set; } = string.Empty;
 
     [Required]
-    public string password { get; set; } = string.Empty;
+    public string? Password { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_megaplay.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250610223444_CreateTableUsers")]
-    partial class CreateTableUsers
+    [Migration("20250616045905_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace API_megaplay.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("API_megaplay.Models.Favorites", b =>
+                {
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MoviesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UsersId", "MoviesId");
+
+                    b.HasIndex("MoviesId");
+
+                    b.ToTable("Favorites");
+                });
 
             modelBuilder.Entity("API_megaplay.Models.Genre", b =>
                 {
@@ -128,13 +143,9 @@ namespace API_megaplay.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("PasswordHash")
+                    b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<byte[]>("PasswordSalt")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -143,6 +154,25 @@ namespace API_megaplay.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("API_megaplay.Models.Favorites", b =>
+                {
+                    b.HasOne("API_megaplay.Models.Movie", "Movie")
+                        .WithMany("Favorites")
+                        .HasForeignKey("MoviesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API_megaplay.Models.User", "User")
+                        .WithMany("Favorites")
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("API_megaplay.Models.Movie", b =>
@@ -169,9 +199,19 @@ namespace API_megaplay.Migrations
                     b.Navigation("Movies");
                 });
 
+            modelBuilder.Entity("API_megaplay.Models.Movie", b =>
+                {
+                    b.Navigation("Favorites");
+                });
+
             modelBuilder.Entity("API_megaplay.Models.Section", b =>
                 {
                     b.Navigation("Movies");
+                });
+
+            modelBuilder.Entity("API_megaplay.Models.User", b =>
+                {
+                    b.Navigation("Favorites");
                 });
 #pragma warning restore 612, 618
         }

@@ -11,6 +11,9 @@ public interface IUserRepository
     // Recibe un ID y devuelve un solo usuario o null si no se encuentra
     User? GetUser(int id);
 
+    // Recibe un email y devuelve un solo usuario o null si no se encuentra
+    User? GetUserByEmail(string email);
+
     // Recibe un id y devuelve un bool indicando si existe el usuario
     bool UserExists(int id);
 
