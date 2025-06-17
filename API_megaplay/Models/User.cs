@@ -14,7 +14,7 @@ public class User
     public string Email { get; set; } = string.Empty;
 
     [Required]
-    public string Username { get; set; } = string.Empty;
+    public string? Username { get; set; } 
 
     [Required]
     public string? Password { get; set; }
@@ -23,6 +23,5 @@ public class User
 
     // TODO: Relación N:M con Movies
     public ICollection<Favorites> Favorites { get; set; } = new List<Favorites>();
-
 
 }

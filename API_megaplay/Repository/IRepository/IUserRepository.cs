@@ -1,5 +1,6 @@
 using System;
 using API_megaplay.Models;
+using API_megaplay.Models.Dtos;
 
 namespace API_megaplay.Repository.IRepository;
 
@@ -11,30 +12,18 @@ public interface IUserRepository
     // Recibe un ID y devuelve un solo usuario o null si no se encuentra
     User? GetUser(int id);
 
-    // Recibe un email y devuelve un solo usuario o null si no se encuentra
-    User? GetUserByEmail(string email);
+    // Recibe un nombre de usuario y devuelve un bool indicando si el nombre de usuario es único.
+    bool IsUniqueUser(string username);
 
-    // Recibe un id y devuelve un bool indicando si existe el usuario
-    bool UserExists(int id);
+    // Recibe un objeto UserLoginDto y devuelve un UserLoginResponseDto de forma asíncrona (Task)
+    Task<UserLoginResponseDto> Login(UserLoginDto userLoginDto);
 
-    // Recibe un email y devuelve un bool indicando si existe el usuario
-    bool UserExists(string email);
-
-    // Recibe una contraseña en texto y la encripta
-    string Encrypt(string password);
-
-    // Recibe una contraseña encriptada y la devuelve desencriptada
-    string Decrypt(string password);
-
-    // Recibe un objeto tipo User y devuelve un bool indicando si la creación fue exitosa
-    bool CreateUser(User user);
+    // Recibe un objeto CreateUserDto y devuelve un objeto User de forma asíncrona (Task).
+    Task<User> Register(CreateUserDto createUserDto);
 
     // Recibe un objeto tipo User y devuelve un bool indicando si la actualización fue exitosa
     bool UpdateUser(User user);
 
     // Recibe un objeto tipo User y devuelve un bool indicando si la eliminación fue exitosa
     bool DeleteUser(User user);
-
-    bool Save();
-
 }

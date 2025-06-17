@@ -1,93 +1,30 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using API_megaplay.Data;
 using API_megaplay.Models;
+using API_megaplay.Models.Dtos;
 using API_megaplay.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API_megaplay.Repository;
 
 public class UserRepository : IUserRepository
 {
-
     // Instancia del contexto
     private readonly ApplicationDbContext _db;
 
-    // Variables de apoyo necesarias para encriptar
-    private byte[] _Key = Encoding.UTF8.GetBytes("jW*Zq4t7w!z%C*F-JaNdRgUkXp2s5u8x");
-    private byte[] _IV = Encoding.UTF8.GetBytes("q3&9z$q31*_t6?z$");
+    // Obtener la llave secreta de appsettings.json
+    private string? secretKey;
 
-    public UserRepository(ApplicationDbContext db)
+    public UserRepository(ApplicationDbContext db, IConfiguration configuration)
     {
         _db = db;
+        secretKey = configuration.GetValue<string>("ApiSettings:SecretKey");
     }
-
-    // Método para encriptar la contraseña
-    public string Encrypt(string password)
-    {
-        using Aes aes = Aes.Create();
-        aes.Key = _Key;
-        aes.IV = _IV;
-
-        ICryptoTransform encryptor = aes.CreateEncryptor();
-
-        using MemoryStream msEncrypt = new();
-        using CryptoStream csEncrypt = new(msEncrypt, encryptor, CryptoStreamMode.Write);
-        using (StreamWriter swEncrypt = new(csEncrypt))
-        {
-            swEncrypt.Write(password);
-        }
-
-        return Convert.ToBase64String(msEncrypt.ToArray());
-    }
-
-    // Método para desencriptar la contraseña
-    public string Decrypt(string cipheredPassword)
-    {
-        using Aes aes = Aes.Create();
-        aes.Key = _Key;
-        aes.IV = _IV;
-
-        ICryptoTransform decryptor = aes.CreateDecryptor();
-
-        byte[] cipheredBytes = Convert.FromBase64String(cipheredPassword);
-        using MemoryStream msEncrypt = new(cipheredBytes);
-        using CryptoStream csEncrypt = new(msEncrypt, decryptor, CryptoStreamMode.Read);
-        using StreamReader srDecrypt = new(csEncrypt);
-
-        return srDecrypt.ReadToEnd();
-    }
-
-    // Método para crear un usuario
-    public bool CreateUser(User user)
-    {
-        // Validación por si el usuario esta vacío
-        if (user == null)
-        {
-            return false;
-        }
-
-        // Encriptar la contraseña al momento de crear el usuario ANTES de mandarlo a la BD
-        user.Password = Encrypt(user.Password!);
-
-        // Guardar usuario
-        user.CreatedAt = DateTime.Now;
-        _db.Users.Add(user);
-        return Save();
-    }
-
-    // Método para eliminar un usuario
-    public bool DeleteUser(User user)
-    {
-        if (user == null)
-        {
-            return false;
-        }
-
-        _db.Users.Remove(user);
-        return Save();
-    }
-
 
     // Método para obtener un usuario mediante el Id
     public User? GetUser(int id)
@@ -105,6 +42,107 @@ public class UserRepository : IUserRepository
     public ICollection<User> GetUsers()
     {
         return _db.Users.OrderBy(u => u.Username).ToList();
+    }
+
+    public bool IsUniqueUser(string email)
+    {
+        return !_db.Users.Any(u => u.Email.ToLower().Trim() == email.ToLower().Trim());
+    }
+
+    public async Task<User> Register(CreateUserDto createUserDto)
+    {
+        var encryptedPassword = BCrypt.Net.BCrypt.HashPassword(createUserDto.Password);
+
+        var user = new User()
+        {
+            Email = createUserDto.Email ?? "No E-mail",
+            Username = createUserDto.Username,
+            Password = encryptedPassword
+        };
+
+        _db.Users.Add(user);
+        await _db.SaveChangesAsync();
+        return user;
+    }
+
+    public async Task<UserLoginResponseDto> Login(UserLoginDto userLoginDto)
+    {
+        // Verificar si nos mandaron el correo electronico
+        if (string.IsNullOrEmpty(userLoginDto.Email))
+        {
+            return new UserLoginResponseDto()
+            {
+                Token = "",
+                User = null,
+                Message = "El Email es requerido"
+            };
+        }
+
+        var user = await _db.Users.FirstOrDefaultAsync<User>(u => u.Email.ToLower().Trim() == userLoginDto.Email.ToLower().Trim());
+
+        // Verificar que el email exista
+        if (user == null)
+        {
+            return new UserLoginResponseDto()
+            {
+                Token = "",
+                User = null,
+                Message = "Email no encontrado"
+            };
+        }
+
+        // Verificar que el password sea igual al que tenemos guardado en la BD
+        if (!BCrypt.Net.BCrypt.Verify(userLoginDto.Password, user.Password))
+        {
+            return new UserLoginResponseDto()
+            {
+                Token = "",
+                User = null,
+                Message = "Credenciales incorrectas"
+            };
+        }
+
+        // Crear el token despues de validar el username y el password
+        var handlerToken = new JwtSecurityTokenHandler();
+
+        //Codificar el secretKey
+        if (string.IsNullOrWhiteSpace(secretKey))
+        {
+            throw new InvalidOperationException("SecretKey no está configurada");
+        }
+
+        var key = Encoding.UTF8.GetBytes(secretKey);
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new[]
+            {
+                new Claim("id", user.UserId.ToString()),
+                new Claim("email", user.Email),
+            }),
+
+            // Fecha de expiración
+            Expires = DateTime.UtcNow.AddHours(2),
+
+            // Firmar las credenciales
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+
+        // Generar token
+        var token = handlerToken.CreateToken(tokenDescriptor);
+
+        return new UserLoginResponseDto()
+        {
+            Token = handlerToken.WriteToken(token),
+            User = new UserRegisterDto()
+            {
+                Email = user.Email,
+                Username = user.Username,
+                Password = user.Password ?? ""
+            },
+
+            Message = "Usuario logueado correctamente"
+        };
     }
 
     // Método para guardar los cambios en la BD
@@ -125,31 +163,20 @@ public class UserRepository : IUserRepository
         return Save();
     }
 
-    // Método para ver si un usuario existe mediante el ID
-    public bool UserExists(int id)
+    // Método para eliminar un usuario
+    public bool DeleteUser(User user)
     {
-        if (id <= 0)
+        if (user == null)
         {
             return false;
         }
 
-        return _db.Users.Any(u => u.UserId == id);
-    }
-
-    // Método para ver si un usuario existe mediante el email
-    public bool UserExists(string email)
-    {
-        if (string.IsNullOrWhiteSpace(email))
-        {
-            return false;
-        }
-
-        return _db.Users.Any(u => u.Email.ToLower().Trim() == email.ToLower().Trim());
+        _db.Users.Remove(user);
+        return Save();
     }
 
     public User? GetUserByEmail(string email)
     {
         return _db.Users.FirstOrDefault(u => u.Email.ToLower().Trim() == email.ToLower().Trim());
     }
-
 }

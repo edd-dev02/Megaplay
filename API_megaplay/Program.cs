@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using API_megaplay.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,25 +25,37 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var secretKey = "clave_super_secreta_eduardo_123!"; // cambia esto
-
-builder.Services.AddAuthentication(options =>
+// Habilitar el CORS
+builder.Services.AddCors(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.RequireHttpsMetadata = false;
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
-    };
+    // Añadir politica
+    options.AddPolicy(
+        PolicyNames.AllowSpecificOrigin,
+        builder =>
+        {
+            builder
+                .WithOrigins("http://localhost:4200") // Solo aplicaciones que se ejecuten desde el puerto 4200 pueden ejecutar solicitudes
+                .AllowAnyMethod() // Permite cualquier método
+                .AllowAnyHeader(); // Permite cualquier cabecera
+        }
+    );
 });
+
+// Configuración del sistema de autenticación con JWT
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false, // Puedes activar esto si usas un issuer
+            ValidateAudience = false, // Puedes activar esto si usas un audience
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["ApiSettings:SecretKey"]!)
+            )
+        };
+    });
 
 
 var app = builder.Build();
@@ -55,6 +68,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Middleware del CORS
+app.UseCors(PolicyNames.AllowSpecificOrigin);
 
 app.UseAuthentication();
 

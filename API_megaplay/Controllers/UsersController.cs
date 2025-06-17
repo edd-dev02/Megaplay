@@ -27,77 +27,6 @@ namespace API_megaplay.Controllers
             _mapper = mapper;
         }
 
-
-        // Endpoint de Authentication
-        [HttpPost("login")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public IActionResult Login([FromBody] LoginDto loginDto)
-        {
-            if (loginDto == null || string.IsNullOrWhiteSpace(loginDto.Email) || string.IsNullOrWhiteSpace(loginDto.Password))
-            {
-                return BadRequest("Email y contraseña son requeridos.");
-            }
-
-            // Buscar el usuario por su email
-            var userFromDb = _userRepository.GetUserByEmail(loginDto.Email);
-
-            if (userFromDb == null)
-            {
-                return Unauthorized("Credenciales inválidas.");
-            }
-
-            // Encriptar la contraseña proporcionada y compararla
-            var encryptedInputPassword = _userRepository.Encrypt(loginDto.Password);
-
-            if (userFromDb.Password != encryptedInputPassword)
-            {
-                return Unauthorized("Credenciales inválidas.");
-            }
-
-            // ========================
-            // Generar el token JWT
-            // ========================
-
-            // 🔐 Esto en la vida real debería venir de appsettings.json
-            var key = "clave-super-secreta-para-token-jwt-1234567890";
-            var keyBytes = Encoding.UTF8.GetBytes(key);
-            var securityKey = new SymmetricSecurityKey(keyBytes);
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            // Puedes agregar más claims si lo deseas
-            var claims = new[]
-            {
-        new Claim(ClaimTypes.NameIdentifier, userFromDb.UserId.ToString()),
-        new Claim(ClaimTypes.Email, userFromDb.Email),
-        new Claim(ClaimTypes.Name, userFromDb.Username),
-    };
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = credentials
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var jwt = tokenHandler.WriteToken(token);
-
-            // Devolver el token al frontend
-            return Ok(new
-            {
-                token = jwt,
-                username = userFromDb.Username,
-                email = userFromDb.Email,
-                userId = userFromDb.UserId
-            });
-        }
-
-
-
-
         // Endpoint obtener los usuarios
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)] // El usuario no está autorizado a acceder a este recurso
@@ -131,38 +60,59 @@ namespace API_megaplay.Controllers
         }
 
         // Endpoint para crear un usuario
-        [HttpPost]
+        [HttpPost(Name = "RegisterUser")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)] // El usuario no está autorizado a acceder a este recurso
         [ProducesResponseType(StatusCodes.Status400BadRequest)] // Realizó mala petición
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)] // Realizó mala petición
         [ProducesResponseType(StatusCodes.Status201Created)] // Se creó correctamente
         [ProducesResponseType(StatusCodes.Status500InternalServerError)] // Error en el servidor
-        public IActionResult CreateUser([FromBody] CreateUserDto createUserDto)
+        public async Task<IActionResult> RegisterUser([FromBody] CreateUserDto createUserDto)
         {
-            // Verificar que no sea nulo
-            if (createUserDto == null)
+            if (createUserDto == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            // Verificar que no exista el usuario que se quiere crear mediante el Email
-            if (_userRepository.UserExists(createUserDto.Email))
+            if (string.IsNullOrWhiteSpace(createUserDto.Email))
             {
-                ModelState.AddModelError("CustomError", $"El correo {createUserDto.Email} ya está registrado");
+                return BadRequest("El email es requerido");
+            }
+
+            if (!_userRepository.IsUniqueUser(createUserDto.Email))
+            {
+                return BadRequest($"El email '{createUserDto.Email} ya está registrado");
+            }
+
+            var result = await _userRepository.Register(createUserDto);
+
+            if (result == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error al registrar el usuario");
+            }
+
+            return CreatedAtRoute("GetUser", new { userId = result.UserId }, result);
+        }
+
+        // Endpoint para iniciar sesión mediante credenciales
+        [HttpPost("Login", Name = "LoginUser")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)] // El usuario no está autorizado a acceder a este recurso
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] // Realizó mala petición
+        [ProducesResponseType(StatusCodes.Status200OK)] // Se creó correctamente
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)] // Error en el servidor
+        public async Task<IActionResult> LoginUser([FromBody] UserLoginDto userLoginDto)
+        {
+            if (userLoginDto == null || !ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
 
-            // Convertir la entidad del DTO en una entidad de dominio
-            var user = _mapper.Map<User>(createUserDto);
+            var user = await _userRepository.Login(userLoginDto);
 
-            if (!_userRepository.CreateUser(user))
+            if (user == null)
             {
-                ModelState.AddModelError("CustomError", $"Algo salió mal al guardar el registro {user.Username}");
-                return StatusCode(500, ModelState);
+                return Unauthorized();
             }
 
-            // Si todo salió bien
-            return CreatedAtRoute("GetUser", new { userId = user.UserId }, user);
+            return Ok(user);
         }
 
         // Endpoint para actualizar un usuario

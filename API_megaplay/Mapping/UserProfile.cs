@@ -7,12 +7,12 @@ namespace API_megaplay.Mapping;
 
 public class UserProfile : Profile
 {
-
     public UserProfile()
     {
         CreateMap<User, UserDto>().ReverseMap();
         CreateMap<User, CreateUserDto>().ReverseMap();
         CreateMap<User, UpdateUserDto>().ReverseMap();
+        CreateMap<User, UserLoginDto>().ReverseMap();
+        CreateMap<User, UserLoginResponseDto>().ReverseMap();
     }
-
 }

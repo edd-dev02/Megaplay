@@ -2,6 +2,7 @@ using API_megaplay.Models;
 using API_megaplay.Models.Dtos;
 using API_megaplay.Repository.IRepository;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_megaplay.Controllers;
@@ -25,6 +26,7 @@ public class MoviesController : ControllerBase
 
     // Endpoint obtener peliculas
     [HttpGet]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status403Forbidden)] // El usuario no está autorizado a acceder a este recurso
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<IEnumerable<MovieDto>> GetMovies()
