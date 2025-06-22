@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Movie, MovieData } from '../interfaces/movie.interfaces';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { Movie } from '../../interfaces/Movie.interface';
+import { appsettings } from '../../settings/appsettings';
 
 @Injectable({
   providedIn: 'root'
@@ -9,46 +10,47 @@ import { Movie, MovieData } from '../interfaces/movie.interfaces';
 
 export class MovieService {
 
-  private url = 'assets/data/movies.json'
-  private FAVORITOS_KEY = 'peliculas_favoritas';
+  private baseUrl: string = appsettings.apiUrl;
+  public favoritosSubject = new BehaviorSubject<number[]>([]);
+  favoritos$ = this.favoritosSubject.asObservable();
 
-  constructor(private http: HttpClient) { }
 
-  // Obtiene todas las peliculas del objeto JSON
-  getMovies(): Observable<MovieData> {
-    return this.http.get<MovieData>(this.url);
+  constructor(private http: HttpClient) {}
+
+  getMovies(): Observable<Movie[]> {
+    return this.http.get<Movie[]>(`${this.baseUrl}Movies`);
   }
 
-  // Obtiene todos las peliculas guardadas en el localstorage
-  obtenerFavoritos(): Movie[] {
-    const data = localStorage.getItem(this.FAVORITOS_KEY);
-    return data ? JSON.parse(data) : [];
-  }
+  getFavorites(): Observable<number[]> {
+  return this.http.get<Movie[]>(`${this.baseUrl}Favorites/movies`).pipe(
+    map((movies: Movie[]) => movies.map(m => m.id)), // transformamos Movie[] a number[]
+    tap((ids: number[]) => this.favoritosSubject.next(ids))
+  );
+}
 
-  // Guarda una película en el localStorage
-  agregarAFavoritos(pelicula: Movie): void {
-    const favoritos = this.obtenerFavoritos();
-    const yaExiste = favoritos.some(p => p.id === pelicula.id);
+  addToFavorites(movieId: number): Observable<any> {
+  return this.http.post(`${this.baseUrl}Favorites/add?movieId=${movieId}`, null).pipe(
+    tap(() => {
+      const current = this.favoritosSubject.getValue();
+      if (!current.includes(movieId)) {
+        this.favoritosSubject.next([...current, movieId]); // 🔄 actualiza el observable
+      }
+    })
+  );
+}
 
-    if (!yaExiste) {
-      favoritos.push(pelicula);
-      localStorage.setItem(this.FAVORITOS_KEY, JSON.stringify(favoritos));
-      console.log('Pelicula agregada a Favoritos');
-    }
-  }
+  removeFromFavorites(movieId: number): Observable<any> {
+  return this.http.delete(`${this.baseUrl}Favorites/remove?movieId=${movieId}`).pipe(
+    tap(() => {
+      const current = this.favoritosSubject.getValue();
+      this.favoritosSubject.next(current.filter(id => id !== movieId));
+    })
+  );
+}
 
-  // Verifica si una película ya está en favoritos
-  estaEnFavoritos(id: string): boolean {
-    const favoritos = this.obtenerFavoritos();
-    return favoritos.some(p => p.id === id);
-  }
 
-  // Elimina del localStorage mediante el id
-  eliminarDeFavoritos(id: string): void {
-    const favoritos = this.obtenerFavoritos();
-    const nuevosFavoritos = favoritos.filter(p => p.id !== id);
-    localStorage.setItem(this.FAVORITOS_KEY, JSON.stringify(nuevosFavoritos));
-    console.log('Película eliminada de Favoritos');
+  isFavorite(movieId: number): boolean {
+    return this.favoritosSubject.getValue().includes(movieId);
   }
 
 }

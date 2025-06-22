@@ -1,0 +1,29 @@
+<div class="auth-container">
+  <h2>Crear cuenta</h2>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="registerError" class="error-message">
+    {{ registerError }}
+  </div>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <label>Email</label>
+    <input type="email" formControlName="email" placeholder="ejemplo@correo.com" />
+    <small *ngIf="email?.invalid && email?.touched">Correo inválido o vacío.</small>
+
+    <label>Nombre de usuario</label>
+    <input type="text" formControlName="username" placeholder="Ej: Messi" />
+    <small *ngIf="username?.invalid && username?.touched">Mínimo 3 caracteres.</small>
+
+    <label>Contraseña</label>
+    <input type="password" formControlName="password" placeholder="••••••" />
+    <small *ngIf="password?.invalid && password?.touched">Mínimo 6 caracteres.</small>
+
+    <button type="submit" [disabled]="registerForm.invalid">Registrarse</button>
+  </form>
+
+  <p class="link-text">
+    ¿Ya tienes una cuenta?
+    <a [routerLink]="['/auth/login']">Inicia sesión aquí</a>
+  </p>
+</div>

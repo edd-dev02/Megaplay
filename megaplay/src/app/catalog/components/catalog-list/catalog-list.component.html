@@ -1,49 +1,46 @@
-<!-- Sección 1 -->
+<shared-navbar></shared-navbar>
+
+<!-- Seccion 1 -->
 <section class="trend contenedor">
   <h2 class="text-light py-3">Sensación del momento...</h2>
 
   <div id="contenedor-trend" class="">
     <div *ngFor="let pelicula of hero">
       <div class="pelicula my-5">
-        <!-- Contenedor imagen de la película -->
         <div class="contenedorImagen">
-          <img [src]="pelicula.imagen" alt="Imagen de la película">
+          <img [src]="pelicula.posterpath" alt="Imagen de la película">
         </div>
 
-        <!-- Contenedor datos de la película -->
         <div class="datos-pelicula">
 
-          <!-- Detalles -->
           <div class="detalles-pelicula">
             <p class="text-light">
-              <span class="fw-bold">Duración: </span>{{ pelicula.duracion }}
+              <span class="fw-bold">Duración: </span>{{ pelicula.duration }}
             </p>
             <p class="text-light">
-              <span class="fw-bold">Género: </span>{{ pelicula.genero }}
+              <span class="fw-bold">Género: </span>{{ pelicula.genreName }}
             </p>
           </div>
 
-          <!-- Información principal -->
           <div class="informacion-pelicula">
-            <h3 class="text-light">{{ pelicula.titulo }}</h3>
-            <p class="text-light">{{ pelicula.descripcion }}</p>
+            <h3 class="text-light">{{ pelicula.title }}</h3>
+            <p class="text-light">{{ pelicula.description }}</p>
 
-            <!-- Calificación -->
             <p class="calificacion">
               <i class="fa-solid fa-star"></i>
-              <span> Calificación: </span>{{ pelicula.calificacion }}
+              <span> Calificación: </span>{{ pelicula.score }}
             </p>
 
-            <!-- Acciones -->
             <div class="acciones">
 
-              <button class="ver-ahora fw-bold">
-                <i class="fa-solid fa-film"></i> Ver
+              <button (click)="verTrailer(pelicula.trailer)" class="ver-ahora fw-bold">
+                <i class="fa-solid fa-film"></i> Ver ahora
               </button>
+
 
               <button (click)="toggleFavorito(pelicula)" class="favorito fw-bold">
                 <i class="fa-solid fa-heart"></i>
-                {{ estaEnFavoritos(pelicula) ? 'Quitar de Favoritos' : 'Agregar a Favoritos' }}
+                {{ estaEnFavoritos(pelicula) ? 'Eliminar de favoritos' : 'Agregar a favoritos' }}
               </button>
 
 
@@ -58,51 +55,47 @@
 </section>
 
 <!-- Sección 2 -->
-<section class="mas_vistos contenedor">
+<section class="recomendados contenedor">
   <h2 class="text-light">Más vistos</h2>
-  <div id="contenedor-masVistos" class="masVistos-grid">
-    <div *ngFor="let pelicula of masVistas">
+  <div id="contenedor-recomendados" class="recomendados-grid">
+    <div *ngFor="let pelicula of masVistos">
       <div class="pelicula my-5">
-        <!-- Contenedor imagen de la película -->
         <div class="contenedorImagen">
-          <img [src]="pelicula.imagen" alt="Imagen de la película">
+          <img [src]="pelicula.posterpath" alt="Imagen de la película">
         </div>
 
-        <!-- Contenedor datos de la película -->
         <div class="datos-pelicula">
 
-          <!-- Detalles -->
           <div class="detalles-pelicula">
             <p class="text-light">
-              <span class="fw-bold">Duración: </span>{{ pelicula.duracion }}
+              <span class="fw-bold">Duración: </span>{{ pelicula.duration }}
             </p>
             <p class="text-light">
-              <span class="fw-bold">Género: </span>{{ pelicula.genero }}
+              <span class="fw-bold">Género: </span>{{ pelicula.genreName }}
             </p>
           </div>
 
-          <!-- Información principal -->
           <div class="informacion-pelicula">
-            <h3 class="text-light">{{ pelicula.titulo }}</h3>
-            <p class="text-light">{{ pelicula.descripcion }}</p>
+            <h3 class="text-light">{{ pelicula.title }}</h3>
+            <p class="text-light">{{ pelicula.description }}</p>
 
-            <!-- Calificación -->
             <p class="calificacion">
               <i class="fa-solid fa-star"></i>
-              <span> Calificación: </span>{{ pelicula.calificacion }}
+              <span> Calificación: </span>{{ pelicula.score }}
             </p>
 
-            <!-- Acciones -->
             <div class="acciones">
 
-              <button class="ver-ahora fw-bold">
-                <i class="fa-solid fa-film"></i> Ver
+              <button (click)="verTrailer(pelicula.trailer)" class="ver-ahora fw-bold">
+                <i class="fa-solid fa-film"></i> Ver ahora
               </button>
+
 
               <button (click)="toggleFavorito(pelicula)" class="favorito fw-bold">
                 <i class="fa-solid fa-heart"></i>
-                {{ estaEnFavoritos(pelicula) ? 'Quitar de Favoritos' : 'Agregar a Favoritos' }}
+                {{ estaEnFavoritos(pelicula) ? 'Eliminar de favoritos' : 'Agregar a favoritos' }}
               </button>
+
 
             </div>
 
@@ -120,46 +113,42 @@
   <div id="contenedor-recomendados" class="recomendados-grid">
     <div *ngFor="let pelicula of recomendados">
       <div class="pelicula my-5">
-        <!-- Contenedor imagen de la película -->
         <div class="contenedorImagen">
-          <img [src]="pelicula.imagen" alt="Imagen de la película">
+          <img [src]="pelicula.posterpath" alt="Imagen de la película">
         </div>
 
-        <!-- Contenedor datos de la película -->
         <div class="datos-pelicula">
 
-          <!-- Detalles -->
           <div class="detalles-pelicula">
             <p class="text-light">
-              <span class="fw-bold">Duración: </span>{{ pelicula.duracion }}
+              <span class="fw-bold">Duración: </span>{{ pelicula.duration }}
             </p>
             <p class="text-light">
-              <span class="fw-bold">Género: </span>{{ pelicula.genero }}
+              <span class="fw-bold">Género: </span>{{ pelicula.genreName }}
             </p>
           </div>
 
-          <!-- Información principal -->
           <div class="informacion-pelicula">
-            <h3 class="text-light">{{ pelicula.titulo }}</h3>
-            <p class="text-light">{{ pelicula.descripcion }}</p>
+            <h3 class="text-light">{{ pelicula.title }}</h3>
+            <p class="text-light">{{ pelicula.description }}</p>
 
-            <!-- Calificación -->
             <p class="calificacion">
               <i class="fa-solid fa-star"></i>
-              <span> Calificación: </span>{{ pelicula.calificacion }}
+              <span> Calificación: </span>{{ pelicula.score }}
             </p>
 
-            <!-- Acciones -->
             <div class="acciones">
 
-              <button class="ver-ahora fw-bold">
-                <i class="fa-solid fa-film"></i> Ver
+              <button (click)="verTrailer(pelicula.trailer)" class="ver-ahora fw-bold">
+                <i class="fa-solid fa-film"></i> Ver ahora
               </button>
+
 
               <button (click)="toggleFavorito(pelicula)" class="favorito fw-bold">
                 <i class="fa-solid fa-heart"></i>
-                {{ estaEnFavoritos(pelicula) ? 'Quitar de Favoritos' : 'Agregar a Favoritos' }}
+                {{ estaEnFavoritos(pelicula) ? 'Eliminar de favoritos' : 'Agregar a favoritos' }}
               </button>
+
 
             </div>
 

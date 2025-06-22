@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'; // 👈 agregamos EventEmitter y Output
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MovieService } from '../../services/movie.service';
-import { Movie } from '../../interfaces/movie.interfaces';
+import { Movie } from '../../../interfaces/Movie.interface';
 
 @Component({
   selector: 'catalog-list',
@@ -9,37 +9,74 @@ import { Movie } from '../../interfaces/movie.interfaces';
 })
 export class CatalogListComponent implements OnInit {
 
+  hero: Movie[] = [];
+  masVistos: Movie[] = [];
+  recomendados: Movie[] = [];
 
-  // @Input() peliculas: Movie[] = [];
+  favoritosIds: number[] = [];
 
-  @Output() quitarFavorito = new EventEmitter<string>();
-
-  public hero: Movie[] = [];
-  public masVistas: Movie[] = [];
-  public recomendados: Movie[] = [];
-
-  constructor(private movieService: MovieService) {}
+  constructor(private movieService: MovieService) { }
 
   ngOnInit(): void {
-    this.movieService.getMovies().subscribe(data => {
-      this.hero = data.hero;
-      this.masVistas = data.mas_vistas;
-      this.recomendados = data.recomendados;
-      console.log(data);
+    this.movieService.getMovies().subscribe({
+      next: (movies) => {
+        this.hero = movies.filter(m => m.sectionName === 'Hero');
+        this.masVistos = movies.filter(m => m.sectionName === 'Mas_vistos');
+        this.recomendados = movies.filter(m => m.sectionName === 'Recomendados');
+      },
+      error: (err) => {
+        console.error('Error al obtener películas:', err);
+      }
     });
+
+    this.movieService.getFavorites().subscribe();
+
+    this.movieService.favoritos$.subscribe(ids => {
+      this.favoritosIds = ids;
+    });
+
   }
 
-  estaEnFavoritos(pelicula: Movie): boolean {
-    return this.movieService.estaEnFavoritos(pelicula.id);
-  }
-
-  toggleFavorito(pelicula: Movie): void {
-    if (this.estaEnFavoritos(pelicula)) {
-      this.movieService.eliminarDeFavoritos(pelicula.id);
-      this.quitarFavorito.emit(pelicula.id);
+  verTrailer(trailerUrl: string): void {
+    if (trailerUrl) {
+      window.open(trailerUrl, '_blank');
     } else {
-      this.movieService.agregarAFavoritos(pelicula);
+      console.warn('No hay trailer disponible');
     }
   }
 
+  toggleFavorito(pelicula: Movie): void {
+    const isFav = this.favoritosIds.includes(pelicula.id);
+
+    if (isFav) {
+      this.movieService.removeFromFavorites(pelicula.id).subscribe({
+        next: () => {
+          // No hace falta volver a llamar a getFavorites()
+          console.log(`Película ${pelicula.id} eliminada de favoritos`);
+        },
+        error: (err) => {
+          console.error('Error al eliminar de favoritos', err);
+        }
+      });
+    } else {
+      this.movieService.addToFavorites(pelicula.id).subscribe({
+        next: () => {
+          console.log(`Película ${pelicula.id} agregada a favoritos`);
+        },
+        error: (err) => {
+          if (err.status === 409) {
+            console.warn('La película ya estaba en favoritos (backend)');
+          } else {
+            console.error('Error al agregar a favoritos', err);
+          }
+        }
+      });
+    }
+  }
+
+  estaEnFavoritos(pelicula: Movie): boolean {
+    return this.favoritosIds.includes(pelicula.id);
+  }
 }
+
+
